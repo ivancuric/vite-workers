@@ -1,15 +1,17 @@
-import { proxy } from 'comlink';
+import { proxy } from "comlink";
+type WorkerModule = typeof import("./worker");
 
 // Create Worker
-const workerInstance = new ComlinkWorker<typeof import('./worker')>(
-  new URL('./worker', import.meta.url)
+const workerInstance = new ComlinkWorker<WorkerModule>(
+  new URL("./worker", import.meta.url)
 );
+
 const result = await workerInstance.add(2, 3);
 
 export const callback = (string: string) => console.log(string);
 
 console.log(result);
 
-await workerInstance.remoteFunction(proxy(callback));
+const proxiedCallback = proxy(callback);
 
-export {};
+await workerInstance.executeCallback(proxiedCallback);
