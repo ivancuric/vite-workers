@@ -7,10 +7,9 @@ const workerInstance = new ComlinkWorker<WorkerModule>(
 );
 
 const result = await workerInstance.add(2, 3);
+console.log(result);
 
 export const callback = (string: string) => console.log(string);
-
-console.log(result);
 
 const proxiedCallback = proxy(callback);
 
